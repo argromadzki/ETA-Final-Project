@@ -37,7 +37,7 @@ def nltk_punctuation(aText):
 
 def punctuationPrep(filestem, fileend, header=True, lang='english',
                        stripspecial=True, stripcomma=True,
-                       textcols=(10, 12), keepcols=(0, 16), append=False):
+                       textcols=(10, 12), keepcols=(0, 4, 5, 7, 8, 16), append=False):
     """Take csv file from LexisNexis output & create clean id,text format.
 
     Merge text fields; punctuation preprocess, and strip header.
