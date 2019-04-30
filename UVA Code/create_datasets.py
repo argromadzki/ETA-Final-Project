@@ -67,7 +67,9 @@ df['fulldate'] = pd.to_datetime(df['fulldate'])
 
 df.sort_values(by=['fulldate', 'weekday', 'section'], inplace= True)
 
-df.iloc[1].text
+# df.iloc[1].text
+
+df['section'].value_counts()
 
 ####################################################
 OHCO = ['year', 'month', 'num_day', 'weekday', 'section', 'docID']
@@ -76,4 +78,6 @@ df_texts = dfi['text']
 df_texts
 
 # df_texts.index[0] # gets the indices of the first thing
-# df_texts.index.get_level_values('section')
+# list(df_texts.index.get_level_values('section').unique())
+
+
