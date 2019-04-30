@@ -61,12 +61,17 @@ list_years = [1999,2000,2002]
 df = make_multiple_dfs(list_years).reset_index(drop=True)
 pd.set_option('display.max_columns', 8)
 
-df
+df['fulldate'] = df["month"] + "-" + df["num_day"].map(str) + "-" + df["year"].map(str)
+
+df['fulldate'] = pd.to_datetime(df['fulldate'])
+
+df.sort_values(by=['fulldate', 'weekday', 'section'], inplace= True)
 
 df.iloc[1].text
 
 ####################################################
 OHCO = ['year', 'month', 'num_day', 'weekday', 'section']
-
 dfi = df.set_index(OHCO)
-dfi['text']
+df_texts = dfi['text']
+
+df_texts
