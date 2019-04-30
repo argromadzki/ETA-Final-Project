@@ -7,13 +7,15 @@ os.getcwd()
 
 
 def create_df(year):
-    df = pd.read_csv('{}_clean.csv'.format(year), header=0)
-    df.columns =  ['doc_number', 'section', 'text'] # assuming we only have df with these features
-                                                    # (update to add year to reflect CSVs)
+    df = pd.read_csv('{}_clean.csv'.format(year), header=-1)
+    df.columns =  ['doc_number', 'year', 'month', 'num_day', 'weekday', 'section', 'text']
     df = get_ID(df)
     df = strip_docID(df)
-    df['Year'] = year
+    # df['year'] = year
     return df
+
+# test = create_df(2000)
+# sum(test.docID.isnull())
 
 # create columns of factiva ID's
 def get_ID(df):
@@ -54,4 +56,27 @@ def make_multiple_dfs(list_of_years):
     big_df = combine_years(list_of_dfs)
     return big_df
 
-combo_df_v2 = make_multiple_dfs([1999,2000])
+
+list_years = [1999,2000,2002]
+df = make_multiple_dfs(list_years).reset_index(drop=True)
+pd.set_option('display.max_columns', 8)
+
+df
+
+df.iloc[1].text
+
+####################################################
+OHCO = ['year', 'month', 'num_day', 'section']
+
+# year_mask = df.groupby('year').first()
+year_filter = list(df.year.unique())
+month_filter = list(df.month.unique())
+day_filter = list(df.num_day.unique())
+section_filter = list(df.section.unique())
+article_filter = list(range(0,len(list(df.text.unique())))) # article filter breaks code due to memory error
+
+idx = pd.MultiIndex.from_product([year_filter, month_filter, day_filter, section_filter, article_filter])
+df2 = pd.DataFrame({'text': df.text}, index=idx)
+
+# pd.MultiIndex.from_frame(df)
+df2
