@@ -70,8 +70,10 @@ df.sort_values(by=['fulldate', 'weekday', 'section'], inplace= True)
 df.iloc[1].text
 
 ####################################################
-OHCO = ['year', 'month', 'num_day', 'weekday', 'section']
+OHCO = ['year', 'month', 'num_day', 'weekday', 'section', 'docID']
 dfi = df.set_index(OHCO)
 df_texts = dfi['text']
-
 df_texts
+
+# df_texts.index[0] # gets the indices of the first thing
+# df_texts.index.get_level_values('section')
