@@ -66,17 +66,7 @@ df
 df.iloc[1].text
 
 ####################################################
-OHCO = ['year', 'month', 'num_day', 'section']
+OHCO = ['year', 'month', 'num_day', 'weekday', 'section']
 
-# year_mask = df.groupby('year').first()
-year_filter = list(df.year.unique())
-month_filter = list(df.month.unique())
-day_filter = list(df.num_day.unique())
-section_filter = list(df.section.unique())
-article_filter = list(range(0,len(list(df.text.unique())))) # article filter breaks code due to memory error
-
-idx = pd.MultiIndex.from_product([year_filter, month_filter, day_filter, section_filter, article_filter])
-df2 = pd.DataFrame({'text': df.text}, index=idx)
-
-# pd.MultiIndex.from_frame(df)
-df2
+dfi = df.set_index(OHCO)
+dfi['text']
