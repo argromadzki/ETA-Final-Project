@@ -158,7 +158,7 @@ vocab['p'] = vocab.n / vocab.n.sum()
 stemmer = nltk.stem.porter.PorterStemmer()
 vocab['port_stem'] = vocab.term_str.apply(lambda x: stemmer.stem(x))
 
-stopwords = set(nltk.corpus.stopwords.words('english') + extra_stopwords)
+stopwords = set(nltk.corpus.stopwords.words('english') ) # + extra_stopwords # add extra stopwords piece within the set if defined
 
 sw = pd.DataFrame({'x':1}, index=stopwords)
 vocab['stop'] = vocab.term_str.map(sw.x).fillna(0).astype('int')
