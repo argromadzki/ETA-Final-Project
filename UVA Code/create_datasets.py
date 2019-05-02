@@ -2,6 +2,7 @@
 import pandas as pd
 import os
 import nltk
+import sqlite3
 
 os.chdir('../../Data')
 os.getcwd()
