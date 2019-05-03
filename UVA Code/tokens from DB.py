@@ -61,224 +61,221 @@ def monthly_tokenizer(key_yearmonth):
     tokens.index.names = OHCO[2:]
     return tokens
 
-
+##################################################
 Jan99 = monthly_tokenizer('1999 January')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Jan99', db, if_exists='replace', index=True)
+    Jan99.to_sql('Jan99', db, if_exists='replace', index=True)
 
 Feb99 = monthly_tokenizer('1999 February')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Feb99', db, if_exists='replace', index=True)
+    Feb99.to_sql('Feb99', db, if_exists='replace', index=True)
 
 Mar99 = monthly_tokenizer('1999 March')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Mar99', db, if_exists='replace', index=True)
+    Mar99.to_sql('Mar99', db, if_exists='replace', index=True)
 
 Apr99 = monthly_tokenizer('1999 April')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Apr99', db, if_exists='replace', index=True)
+    Apr99.to_sql('Apr99', db, if_exists='replace', index=True)
 
 May99 = monthly_tokenizer('1999 May')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('May99', db, if_exists='replace', index=True)
+    May99.to_sql('May99', db, if_exists='replace', index=True)
 
 June99 = monthly_tokenizer('1999 June')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('June99', db, if_exists='replace', index=True)
+    June99.to_sql('June99', db, if_exists='replace', index=True)
 
 July99 = monthly_tokenizer('1999 July')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('July99', db, if_exists='replace', index=True)
+    July99.to_sql('July99', db, if_exists='replace', index=True)
 
 Aug99 = monthly_tokenizer('1999 August')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Aug99', db, if_exists='replace', index=True)
+    Aug99.to_sql('Aug99', db, if_exists='replace', index=True)
 
 Sept99 = monthly_tokenizer('1999 September')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Sept99', db, if_exists='replace', index=True)
+    Sept99.to_sql('Sept99', db, if_exists='replace', index=True)
 
 Oct99 = monthly_tokenizer('1999 October')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Oct99', db, if_exists='replace', index=True)
+    Oct99.to_sql('Oct99', db, if_exists='replace', index=True)
 
 Nov99 = monthly_tokenizer('1999 November')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Nov99', db, if_exists='replace', index=True)
+    Nov99.to_sql('Nov99', db, if_exists='replace', index=True)
 
 Dec99 = monthly_tokenizer('1999 December')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Dec99', db, if_exists='replace', index=True)
+    Dec99.to_sql('Dec99', db, if_exists='replace', index=True)
 
 
-
+##################################################
 
 Jan00 = monthly_tokenizer('2000 January')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Jan00', db, if_exists='replace', index=True)
+    Jan00.to_sql('Jan00', db, if_exists='replace', index=True)
 
 Feb00 = monthly_tokenizer('2000 February')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Feb00', db, if_exists='replace', index=True)
+    Feb00.to_sql('Feb00', db, if_exists='replace', index=True)
 
 Mar00 = monthly_tokenizer('2000 March')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Mar00', db, if_exists='replace', index=True)
+    Mar00.to_sql('Mar00', db, if_exists='replace', index=True)
     
 Apr00 = monthly_tokenizer('2000 April')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Apr00', db, if_exists='replace', index=True)
+    Apr00.to_sql('Apr00', db, if_exists='replace', index=True)
     
 May00 = monthly_tokenizer('2000 May')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('May00', db, if_exists='replace', index=True)
+    May00.to_sql('May00', db, if_exists='replace', index=True)
     
 June00 = monthly_tokenizer('2000 June')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('June00', db, if_exists='replace', index=True)
+    June00.to_sql('June00', db, if_exists='replace', index=True)
     
 July00 = monthly_tokenizer('2000 July')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('July00', db, if_exists='replace', index=True)
+    July00.to_sql('July00', db, if_exists='replace', index=True)
     
 Aug00 = monthly_tokenizer('2000 August')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Aug00', db, if_exists='replace', index=True)
+    Aug00.to_sql('Aug00', db, if_exists='replace', index=True)
     
 Sept00 = monthly_tokenizer('2000 September')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Sept00', db, if_exists='replace', index=True)
+    Sept00.to_sql('Sept00', db, if_exists='replace', index=True)
     
 Oct00 = monthly_tokenizer('2000 October')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Oct00', db, if_exists='replace', index=True)
+    Oct00.to_sql('Oct00', db, if_exists='replace', index=True)
     
 Nov00 = monthly_tokenizer('2000 November')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Nov00', db, if_exists='replace', index=True)
+    Nov00.to_sql('Nov00', db, if_exists='replace', index=True)
     
 Dec00 = monthly_tokenizer('2000 December')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Dec00', db, if_exists='replace', index=True)
+    Dec00.to_sql('Dec00', db, if_exists='replace', index=True)
     
-
+##################################################
 
 
 Jan01 = monthly_tokenizer('2001 January')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Jan01', db, if_exists='replace', index=True)
+    Jan01.to_sql('Jan01', db, if_exists='replace', index=True)
 
 Feb01 = monthly_tokenizer('2001 February')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Feb01', db, if_exists='replace', index=True)
+    Feb01.to_sql('Feb01', db, if_exists='replace', index=True)
 
 Mar01 = monthly_tokenizer('2001 March')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Mar01', db, if_exists='replace', index=True)
+    Mar01.to_sql('Mar01', db, if_exists='replace', index=True)
     
 Apr01 = monthly_tokenizer('2001 April')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Apr01', db, if_exists='replace', index=True)
+    Apr01.to_sql('Apr01', db, if_exists='replace', index=True)
     
 May01 = monthly_tokenizer('2001 May')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('May01', db, if_exists='replace', index=True)
+    May01.to_sql('May01', db, if_exists='replace', index=True)
     
 June01 = monthly_tokenizer('2001 June')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('June01', db, if_exists='replace', index=True)
+    June01.to_sql('June01', db, if_exists='replace', index=True)
     
 July01 = monthly_tokenizer('2001 July')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('July01', db, if_exists='replace', index=True)
+    July01.to_sql('July01', db, if_exists='replace', index=True)
     
 Aug01 = monthly_tokenizer('2001 August')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Aug01', db, if_exists='replace', index=True)
+    Aug01.to_sql('Aug01', db, if_exists='replace', index=True)
     
 Sept01 = monthly_tokenizer('2001 September')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Sept01', db, if_exists='replace', index=True)
+    Sept01.to_sql('Sept01', db, if_exists='replace', index=True)
     
 Oct01 = monthly_tokenizer('2001 October')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Oct01', db, if_exists='replace', index=True)
+    Oct01.to_sql('Oct01', db, if_exists='replace', index=True)
     
 Nov01 = monthly_tokenizer('2001 November')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Nov01', db, if_exists='replace', index=True)
+    Nov01.to_sql('Nov01', db, if_exists='replace', index=True)
     
 Dec01 = monthly_tokenizer('2001 December')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Dec01', db, if_exists='replace', index=True)
+    Dec01.to_sql('Dec01', db, if_exists='replace', index=True)
     
-
-
+##################################################
 
 
 Jan02 = monthly_tokenizer('2002 January')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Jan02', db, if_exists='replace', index=True)
+    Jan02.to_sql('Jan02', db, if_exists='replace', index=True)
 
 Feb02 = monthly_tokenizer('2002 February')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Feb02', db, if_exists='replace', index=True)
+    Feb02.to_sql('Feb02', db, if_exists='replace', index=True)
 
 Mar02 = monthly_tokenizer('2002 March')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Mar02', db, if_exists='replace', index=True)
+    Mar02.to_sql('Mar02', db, if_exists='replace', index=True)
     
 Apr02 = monthly_tokenizer('2002 April')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Apr02', db, if_exists='replace', index=True)
+    Apr02.to_sql('Apr02', db, if_exists='replace', index=True)
     
 May02 = monthly_tokenizer('2002 May')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('May02', db, if_exists='replace', index=True)
+    May02.to_sql('May02', db, if_exists='replace', index=True)
     
 June02 = monthly_tokenizer('2002 June')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('June02', db, if_exists='replace', index=True)
+    June02.to_sql('June02', db, if_exists='replace', index=True)
     
 July02 = monthly_tokenizer('2002 July')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('July02', db, if_exists='replace', index=True)
+    July02.to_sql('July02', db, if_exists='replace', index=True)
     
 Aug02 = monthly_tokenizer('2002 August')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Aug02', db, if_exists='replace', index=True)
+    Aug02.to_sql('Aug02', db, if_exists='replace', index=True)
     
 Sept02 = monthly_tokenizer('2002 September')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Sept02', db, if_exists='replace', index=True)
+    Sept02.to_sql('Sept02', db, if_exists='replace', index=True)
     
 Oct02 = monthly_tokenizer('2002 October')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Oct02', db, if_exists='replace', index=True)
+    Oct02.to_sql('Oct02', db, if_exists='replace', index=True)
     
 Nov02 = monthly_tokenizer('2002 November')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Nov02', db, if_exists='replace', index=True)
+    Nov02.to_sql('Nov02', db, if_exists='replace', index=True)
     
 Dec02 = monthly_tokenizer('2002 December')
 with sqlite3.connect('WSJ-Monthly.db') as db:
-    sents.to_sql('Dec02', db, if_exists='replace', index=True)
+    Dec02.to_sql('Dec02', db, if_exists='replace', index=True)
     
 
 
 
 
 
+# test_dict_month['1999 January']
 
-
-test_dict_month['1999 January']
-
-tokens = test_dict_month['1999 January'].sent_str\
-    .apply(lambda x: pd.Series(nltk.word_tokenize(x)))\
-    .stack()\
-    .to_frame()\
-    .rename(columns={0:'token_str'})
-tokens.index.names = OHCO[2:]
+# tokens = test_dict_month['1999 January'].sent_str\
+#     .apply(lambda x: pd.Series(nltk.word_tokenize(x)))\
+#     .stack()\
+#     .to_frame()\
+#     .rename(columns={0:'token_str'})
+# tokens.index.names = OHCO[2:]
 
 
 
