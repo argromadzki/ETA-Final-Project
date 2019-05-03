@@ -62,8 +62,9 @@ def monthly_tokenizer(key_yearmonth):
     return tokens
 
 
-def full_monthly_tokenizer(list_keys): #### haven't called this, but it should run everything
+def full_monthly_tokenizer(list_keys): 
     for key_yearmonth in list_keys:
+        print('Processing {}'.format(key_yearmonth)) # note this isn't popping up
         tokens = test_dict_month[key_yearmonth].sent_str\
             .apply(lambda x: pd.Series(nltk.word_tokenize(x)))\
             .stack()\
@@ -72,9 +73,18 @@ def full_monthly_tokenizer(list_keys): #### haven't called this, but it should r
         tokens.index.names = OHCO[2:]
         with sqlite3.connect('WSJ-Monthly.db') as db:
             tokens.to_sql(str(key_yearmonth), db, if_exists='replace', index=True)
+        print("Finished {}".format(key_yearmonth))
         del(tokens)
 
+year99 = list(list_keys)[0:12]
+year00 = list(list_keys)[12:24]
+year01 = list(list_keys)[24:36]
+year02 = list(list_keys)[36:]
 
+# full_monthly_tokenizer(year99)
+full_monthly_tokenizer(year00)
+full_monthly_tokenizer(year01)
+full_monthly_tokenizer(year02)
 ##################################################
 Jan99 = monthly_tokenizer('1999 January')
 with sqlite3.connect('WSJ-Monthly.db') as db:
