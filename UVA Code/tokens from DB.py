@@ -49,7 +49,7 @@ def to_months(list_of_years):
     return month_dictionary
 
 test_dict_month = to_months([1999,2000,2001,2002])
-test_dict_month
+list_keys = test_dict_month.keys()
 
 
 def monthly_tokenizer(key_yearmonth):
@@ -60,6 +60,19 @@ def monthly_tokenizer(key_yearmonth):
         .rename(columns={0:'token_str'})
     tokens.index.names = OHCO[2:]
     return tokens
+
+
+def full_monthly_tokenizer(list_keys): #### haven't called this, but it should run everything
+    for key_yearmonth in list_keys:
+        tokens = test_dict_month[key_yearmonth].sent_str\
+            .apply(lambda x: pd.Series(nltk.word_tokenize(x)))\
+            .stack()\
+            .to_frame()\
+            .rename(columns={0:'token_str'})
+        tokens.index.names = OHCO[2:]
+        with sqlite3.connect('WSJ-Monthly.db') as db:
+            tokens.to_sql(str(key_yearmonth), db, if_exists='replace', index=True)
+
 
 ##################################################
 Jan99 = monthly_tokenizer('1999 January')
