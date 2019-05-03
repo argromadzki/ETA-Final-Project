@@ -1,3 +1,8 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
 
 import pandas as pd
 import os
@@ -6,6 +11,11 @@ import sqlite3
 
 os.chdir('../../Data')
 os.getcwd()
+
+
+# In[2]:
+
+
 
 
 def create_df(year):
@@ -93,23 +103,25 @@ def make_multiple_dfs(list_of_years):
     return big_df
 
 
-if __name__ == "__main__":
+list_years = [1999,2000,2001,2002]
+df = make_multiple_dfs(list_years).reset_index(drop=True)
+pd.set_option('display.max_columns', 8)
 
-    list_years = [1999,2000,2001,2002]
-    df = make_multiple_dfs(list_years).reset_index(drop=True)
-    pd.set_option('display.max_columns', 8)
+df['fulldate'] = df["month"] + "-" + df["num_day"].map(str) + "-" + df["year"].map(str)
 
-    df['fulldate'] = df["month"] + "-" + df["num_day"].map(str) + "-" + df["year"].map(str)
+df['fulldate'] = pd.to_datetime(df['fulldate'])
 
-    df['fulldate'] = pd.to_datetime(df['fulldate'])
+df.sort_values(by=['fulldate', 'weekday', 'section'], inplace= True)
 
-    df.sort_values(by=['fulldate', 'weekday', 'section'], inplace= True)
+# df.iloc[1].text
 
-    # df.iloc[1].text
+df['section'].value_counts()
 
-    df['section'].value_counts()
 
-####################################################
+# In[9]:
+
+
+nltk.download('punkt')
 OHCO = ['year', 'month', 'num_day', 'weekday', 'section', 'docID', 'sentence_id', 'token_id']
 ARTICLE = OHCO[:6]
 SENTS = OHCO[:7]
@@ -122,32 +134,39 @@ dfi = df.set_index(ARTICLE)
 # list(df_texts.index.get_level_values('section').unique())
 
 print('Processing sentences...')
-sents = dfi.text\
-    .apply(lambda x: pd.Series(nltk.sent_tokenize(x)))\
-    .stack()\
-    .to_frame()\
-    .rename(columns={0:'sent_str'})
+sents = dfi.text    .apply(lambda x: pd.Series(nltk.sent_tokenize(x)))    .stack()    .to_frame()    .rename(columns={0:'sent_str'})
 sents.index.names = SENTS
 
+
+# In[13]:
+
+
+# sents.to_csv('sentence_benchmark.csv', sep=',', encoding='utf-8')
+# sents
+# sents2 = pd.read_csv('sentence_benchmark.csv')
+# sents2
+
+with sqlite3.connect('WSJ.db') as db:
+    sents.to_sql('benchmark', db, if_exists='replace', index=True)
+
+
+# # Start from here to save memory!
+
+# In[16]:
+
+
+with sqlite3.connect('WSJ.db') as db:
+    sents3 = pd.read_sql('SELECT * FROM benchmark', db, index_col=OHCO[:-1])
+sents3.head()
+
+
+# In[ ]:
+
+
+
 print('Processing tokens...')
-# tokens = sents.sent_str\
-#     .apply(lambda x: pd.Series(nltk.pos_tag(nltk.word_tokenize(x))))\
-#     .stack()\
-#     .to_frame()\
-#     .rename(columns={0:'pos_tuple'})
-# print('success')
-# tokens.index.names = OHCO
-# tokens['pos'] = tokens.pos_tuple.apply(lambda x: x[1])
-# tokens['token_str'] = tokens.pos_tuple.apply(lambda x: x[0])
-# tokens = tokens.drop('pos_tuple', 1)
-# del(sents)
 
-
-tokens = sents.sent_str\
-    .apply(lambda x: pd.Series(nltk.word_tokenize(x)))\
-    .stack()\
-    .to_frame()\
-    .rename(columns={0:'token_str'})
+tokens = sents.sent_str    .apply(lambda x: pd.Series(nltk.word_tokenize(x)))    .stack()    .to_frame()    .rename(columns={0:'token_str'})
 tokens.index.names = OHCO
 del(sents)
 
@@ -156,11 +175,8 @@ tokens['punc'] = tokens.token_str.str.match(r'^[\W_]*$').astype('int')
 tokens['num'] = tokens.token_str.str.match(r'^.*\d.*$').astype('int')
 
 WORDS = (tokens.punc == 0) & (tokens.num == 0)
-tokens.loc[WORDS, 'term_str'] = tokens.token_str.str.lower()\
-    .str.replace(r'["_*.]', '')
-vocab = tokens[tokens.punc == 0].term_str.value_counts().to_frame()\
-    .reset_index()\
-    .rename(columns={'index':'term_str', 'term_str':'n'})
+tokens.loc[WORDS, 'term_str'] = tokens.token_str.str.lower()    .str.replace(r'["_*.]', '')
+vocab = tokens[tokens.punc == 0].term_str.value_counts().to_frame()    .reset_index()    .rename(columns={'index':'term_str', 'term_str':'n'})
 vocab = vocab.sort_values('term_str').reset_index(drop=True)
 vocab.index.name = 'term_id'
 
@@ -175,10 +191,9 @@ sw = pd.DataFrame({'x':1}, index=stopwords)
 vocab['stop'] = vocab.term_str.map(sw.x).fillna(0).astype('int')
 del(sw)
 
-tokens['term_id'] = tokens['term_str'].map(vocab.reset_index()\
-    .set_index('term_str').term_id).fillna(-1).astype('int')
+tokens['term_id'] = tokens['term_str'].map(vocab.reset_index()    .set_index('term_str').term_id).fillna(-1).astype('int')
 
-os.chdir('..')
 with sqlite3.connect('WSJ.db') as db:
     tokens.to_sql('token', db, if_exists='replace', index=True)
     vocab.to_sql('vocab', db, if_exists='replace', index=True)
+
