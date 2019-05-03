@@ -8,6 +8,8 @@ import pandas as pd
 import os
 import nltk
 import sqlite3
+import multiprocessing as mp
+
 
 os.chdir('../../Data')
 os.getcwd()
@@ -121,7 +123,7 @@ df['section'].value_counts()
 # In[9]:
 
 
-nltk.download('punkt')
+# nltk.download('punkt') # uncomment this for aws
 OHCO = ['year', 'month', 'num_day', 'weekday', 'section', 'docID', 'sentence_id', 'token_id']
 ARTICLE = OHCO[:6]
 SENTS = OHCO[:7]
@@ -157,6 +159,7 @@ with sqlite3.connect('WSJ.db') as db:
 
 with sqlite3.connect('WSJ.db') as db:
     sents3 = pd.read_sql('SELECT * FROM benchmark', db, index_col=OHCO[:-1])
+
 sents3.head()
 
 
@@ -165,10 +168,14 @@ sents3.head()
 
 
 print('Processing tokens...')
-
-tokens = sents.sent_str    .apply(lambda x: pd.Series(nltk.word_tokenize(x)))    .stack()    .to_frame()    .rename(columns={0:'token_str'})
-tokens.index.names = OHCO
-del(sents)
+with mp.Pool() as pool:
+    tokens = pool.map(sents.sent_str\
+        .apply(lambda x: pd.Series(nltk.word_tokenize(x)))\
+        .stack()\
+        .to_frame()\
+        .rename(columns={0:'token_str'}))
+    tokens.index.names = OHCO
+    del(sents)
 
 
 tokens['punc'] = tokens.token_str.str.match(r'^[\W_]*$').astype('int')
