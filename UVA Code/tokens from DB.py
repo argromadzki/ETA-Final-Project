@@ -72,6 +72,7 @@ def full_monthly_tokenizer(list_keys): #### haven't called this, but it should r
         tokens.index.names = OHCO[2:]
         with sqlite3.connect('WSJ-Monthly.db') as db:
             tokens.to_sql(str(key_yearmonth), db, if_exists='replace', index=True)
+        del(tokens)
 
 
 ##################################################
@@ -110,18 +111,22 @@ with sqlite3.connect('WSJ-Monthly.db') as db:
 Sept99 = monthly_tokenizer('1999 September')
 with sqlite3.connect('WSJ-Monthly.db') as db:
     Sept99.to_sql('Sept99', db, if_exists='replace', index=True)
+    del(Sept99)
 
 Oct99 = monthly_tokenizer('1999 October')
 with sqlite3.connect('WSJ-Monthly.db') as db:
     Oct99.to_sql('Oct99', db, if_exists='replace', index=True)
+    del(Oct99)
 
 Nov99 = monthly_tokenizer('1999 November')
 with sqlite3.connect('WSJ-Monthly.db') as db:
     Nov99.to_sql('Nov99', db, if_exists='replace', index=True)
+    del(Nov99)
 
 Dec99 = monthly_tokenizer('1999 December')
 with sqlite3.connect('WSJ-Monthly.db') as db:
     Dec99.to_sql('Dec99', db, if_exists='replace', index=True)
+    del(Dec99)
 
 
 ##################################################
@@ -129,15 +134,18 @@ with sqlite3.connect('WSJ-Monthly.db') as db:
 Jan00 = monthly_tokenizer('2000 January')
 with sqlite3.connect('WSJ-Monthly.db') as db:
     Jan00.to_sql('Jan00', db, if_exists='replace', index=True)
+    del(Jan00)
 
 Feb00 = monthly_tokenizer('2000 February')
 with sqlite3.connect('WSJ-Monthly.db') as db:
     Feb00.to_sql('Feb00', db, if_exists='replace', index=True)
+    del(Feb00)
 
 Mar00 = monthly_tokenizer('2000 March')
 with sqlite3.connect('WSJ-Monthly.db') as db:
     Mar00.to_sql('Mar00', db, if_exists='replace', index=True)
-    
+    del(Mar00) ######## ADD MORE OF THESE BEFORE RUNNING
+
 Apr00 = monthly_tokenizer('2000 April')
 with sqlite3.connect('WSJ-Monthly.db') as db:
     Apr00.to_sql('Apr00', db, if_exists='replace', index=True)
