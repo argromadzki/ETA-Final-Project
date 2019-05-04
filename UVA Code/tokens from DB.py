@@ -85,6 +85,11 @@ year02 = list(list_keys)[36:]
 full_monthly_tokenizer(year00)
 full_monthly_tokenizer(year01)
 full_monthly_tokenizer(year02)
+
+
+
+'''
+# goodbye garbage hardcoding
 ##################################################
 Jan99 = monthly_tokenizer('1999 January')
 with sqlite3.connect('WSJ-Monthly.db') as db:
@@ -324,3 +329,4 @@ with sqlite3.connect('WSJ-Monthly.db') as db:
 #     .to_frame()\
 #     .rename(columns={0:'token_str'})
 # tokens.index.names = OHCO
+'''
