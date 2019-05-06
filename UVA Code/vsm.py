@@ -6,7 +6,7 @@ import nltk
 import sqlite3
 import numpy as np
 
-db_name = '____' # Fill this in!
+db_name = 'WSJ-processed-full.db'
 
 os.chdir('../../Data')
 os.getcwd()
@@ -14,7 +14,7 @@ os.getcwd()
 OHCO = ['year', 'month', 'num_day', 'weekday', 'section', 'docID', 'sentence_id', 'token_id']
 
 with sqlite3.connect(db_name) as db:
-    K = pd.read_sql('SELECT * FROM token', db, index_col=OHCO)
+    K = pd.read_sql('SELECT * FROM token', db, index_col=OHCO, chunksize=1000)
     V = pd.read_sql('SELECT * FROM vocab', db, index_col='term_id')
 
 
@@ -22,7 +22,7 @@ with sqlite3.connect(db_name) as db:
 WORDS = (K.punc == 0) & (K.num == 0) & K.term_id.isin(V[V.stop==0].index)
 
 # Extract BOW from Tokens
-BOW = K[WORDS].groupby(OHCO[:1]+['term_id'])['term_id'].count()
+BOW = K[WORDS].groupby(OHCO[:6]+['term_id'])['term_id'].count()
 
 # Convert BOW to DTM
 DTM = BOW.unstack().fillna(0)
