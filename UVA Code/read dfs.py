@@ -5,7 +5,7 @@ import nltk
 import sqlite3
 
 
-os.chdir('../../Data')
+os.chdir('../../Data/Reduced')
 os.getcwd()
 
 OHCO = ['year', 'month', 'num_day', 'weekday', 'section', 'docID', 'sentence_id', 'token_id']
@@ -48,7 +48,7 @@ def reorient_things(year_month):
 
 
 # could use the function from before to get this, but just copied output for time's sake
-list_keys = ['1999 January', '1999 February', '1999 March', '1999 April', '1999 May', '1999 June', '1999 July', '1999 August', '1999 September', '1999 October', '1999 November', '1999 December', '2000 January', '2000 February', '2000 March', '2000 April', '2000 May', '2000 June', '2000 July', '2000 August', '2000 September', '2000 October', '2000 November', '2000 December', '2001 January', '2001 February', '2001 March', '2001 April', '2001 May', '2001 June', '2001 July', '2001 August', '2001 September', '2001 October', '2001 November', '2001 December', '2002 January', '2002 February', '2002 March', '2002 April', '2002 May', '2002 June', '2002 July', '2002 August', '2002 September', '2002 October', '2002 November', '2002 December']
+list_keys = ['2001 January', '2001 February', '2001 March', '2001 April', '2001 May', '2001 June', '2001 July', '2001 August', '2001 September', '2001 October', '2001 November', '2001 December']
 
 
 def reassemble(list_keys):
@@ -222,13 +222,16 @@ with sqlite3.connect('WSJ-reindexed.db') as db:
 #######################################################
 
 # df1b = df1
-dflist = [df1, df2, df3, df4, df5, df6, df7, df8, df9, df10, df11, df12, df13, df14, df15, df16, df17, df18, df19, df20, df21, df22, df23, df24, df25, df26, df27, df28, df29, df30, df31, df32, df33, df34, df35, df36, df37, df38, df39, df40, df41, df42, df43, df44, df45, df46, df47, df48]
-total = df1.append(dflist[1:]) 
+# dflist = [df1, df2, df3, df4, df5, df6, df7, df8, df9, df10, df11, df12, df13, df14, df15, df16, df17, df18, df19, df20, df21, df22, df23, df24, df25, df26, df27, df28, df29, df30, df31, df32, df33, df34, df35, df36, df37, df38, df39, df40, df41, df42, df43, df44, df45, df46, df47, df48]
+# total = df1.append(dflist[1:]) 
+
+dflist = [df25, df26, df27, df28, df29, df30, df31, df32, df33, df34, df35, df36]
+total = df25.append(dflist[1:]) 
 
 # run from here, double checking if total tail works --> should be Dec2002
 
-total.tail()
-total_backup = total # to save us a headache if we mess up total somehow
+# total.tail()
+# total_backup = total # to save us a headache if we mess up total somehow
 # total.reset_index(level=OHCO, inplace= True)  # ended up not needing this line -- there was some random index number for each row within a month
 
 
@@ -249,8 +252,14 @@ with sqlite3.connect('WSJ-full.db') as db:
 
 # After creating the full indexed and tokenized df
 
-with sqlite3.connect('WSJ-processed-full.db') as db:
-    tokens = pd.read_sql('SELECT * FROM token', db, index_col = OHCO)
+with sqlite3.connect('WSJ-full.db') as db: # need to not have this multiindexed
+    tokens = pd.read_sql('SELECT * FROM full', db)
+
+# with sqlite3.connect('WSJ-full.db') as db:
+#     tokens = pd.read_sql('SELECT year, month, num_day, weekday, section, docID, sentence_id, token_id, token_str, punc, num, term_str, term_id FROM token WHERE year=2000', db, index_col = OHCO)
+
+    # ^ if running straight through, just say tokens = total 
+
 
 #with sqlite3.connect('WSJ-thru-01.db') as db:
 #    tokens = pd.read_sql('SELECT * FROM thru-01', db)
@@ -292,16 +301,16 @@ tokens['term_id'] = tokens['term_str'].map(vocab.reset_index()\
 #     tokens.to_sql('token', db, if_exists='replace', index=True)
 
 
-tokens_test = tokens
+# tokens_test = tokens
 
-tokens_test.year[1]
+# tokens_test.year[1]
 
-tokens_test99 = tokens_test.head()[tokens_test.head().year=='1999',:]
-len(tokens_test)
+# tokens_test99 = tokens_test.head()[tokens_test.head().year=='1999',:]
+# len(tokens_test)
 
 
-OHCO2 = ['year'] # 'month', 'num_day', 'weekday', 'section', 'docID', 'sentence_id', 'token_id', 'term_id'] 
-tokens.set_index(OHCO2, inplace= True)
+# OHCO2 = ['year'] # 'month', 'num_day', 'weekday', 'section', 'docID', 'sentence_id', 'token_id', 'term_id'] 
+# tokens.set_index(OHCO2, inplace= True)
 
 # OHCO3 = ['year', 'month']
 
@@ -357,9 +366,3 @@ def chunk_writer(df, increment=5000):
 
 
 chunk_writer(tokens)
-
-
-# create initial  overalldf using jan 99
-# read in wtih sql for each mo after
-# fix index at current yearmonth
-# append current year month to overall df
