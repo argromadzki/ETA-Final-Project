@@ -28,6 +28,25 @@ K = K.rename(columns={'num_day':'day', 'docID':'doc_key', 'sentence_id':'sentenc
 
 K.head()
 
+# #writing out and converting to csv with full data 
+
+# with sqlite3.connect('WSJ-processed-full.db') as db:
+#     tokens = pd.read_sql('SELECT year, month, num_day, weekday, section, docID, sentence_id, token_id, token_str, punc, num, term_str, term_id FROM token WHERE year=1999', db, index_col = OHCO)
+
+# with sqlite3.connect('WSJ-processed-full.db') as db:
+#     tokens1 = pd.read_sql('SELECT year, month, num_day, weekday, section, docID, sentence_id, token_id, token_str, punc, num, term_str, term_id FROM token WHERE year=2000', db, index_col = OHCO)
+
+# with sqlite3.connect('WSJ-processed-full.db') as db:
+#     tokens2 = pd.read_sql('SELECT year, month, num_day, weekday, section, docID, sentence_id, token_id, token_str, punc, num, term_str, term_id FROM token WHERE year=2001', db, index_col = OHCO)
+
+# with sqlite3.connect('WSJ-processed-full.db') as db:
+#     tokens3 = pd.read_sql('SELECT year, month, num_day, weekday, section, docID, sentence_id, token_id, token_str, punc, num, term_str, term_id FROM token WHERE year=2002', db, index_col = OHCO)        
+
+
+# stepone = tokens.append(tokens1)
+# steptwo = stepone.append(tokens2)
+# stepthree = steptwo.append(tokens3)
+
 
 # fix the months to save memory
 import calendar
