@@ -266,7 +266,8 @@ with sqlite3.connect('WSJ-full.db') as db: # need to not have this multiindexed
 
 tokens['punc'] = tokens.token_str.str.match(r'^[\W_]*$').astype('int')
 tokens['num'] = tokens.token_str.str.match(r'^.*\d.*$').astype('int') # does this regex capture something like "1dot6"
-
+tokens['non_alpha'] = tokens.token_str.str.match(r'^a-zA-Z\d\s:').astype('int')
+    
 WORDS = (tokens.punc == 0) & (tokens.num == 0) # BREAKS AFTER THIS!!!!!!!!!!!
 tokens.loc[WORDS, 'term_str'] = tokens.token_str.str.lower()\
     .str.replace(r'["_*.]', '')

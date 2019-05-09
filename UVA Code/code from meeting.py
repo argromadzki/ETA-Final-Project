@@ -114,22 +114,29 @@ TFIDF.sort_values('f', ascending=True)
 
 TFIDF.f.describe()
 
-x = TFIDF.f.quantile(.75)
+x = TFIDF.f.quantile(.50)
 
 TFIDF[TFIDF.f > x]
 
 
 # ========== added after meeting ========== 
+# TFIDF.loc[0].sum() # debugging what our TFIDF looks like -- it is different from those in Textman files
+# TFIDF.head().max()
 
-V['tfidf_sum'] = TFIDF.sum()
+# term_id_headers = V.term_id
+# doc_id_rows = list(D.index)
+
+# reshaped_TFIDF = pd.DataFrame(index = doc_id_rows, columns=term_id_headers) # this would give 180k x 30k dataframe -- memory error
+
+# V['tfidf_sum'] = TFIDF.sum()
 # V['tfidf_mean'] = TFIDF.mean() # computationally expensive -- don't need all of them
 # V['tfidf_max'] = TFIDF.max()
 
-# create pairs (only run this if we want comparisons)
-doc_ids = D.index.tolist()
-pairs = [(i,j) for i in doc_ids for j in doc_ids if j > i]
-P = pd.DataFrame(pairs).reset_index(drop=True).set_index([0,1])
-P.index.names = ['doc_x','doc_y']
+# create pairs (only run this if we want comparisons) -- too memory intensive, again
+# doc_ids = D.index.tolist()
+# pairs = [(i,j) for i in doc_ids for j in doc_ids if j > i]
+# P = pd.DataFrame(pairs).reset_index(drop=True).set_index([0,1])
+# P.index.names = ['doc_x','doc_y']
 
 # reduce vocabulary based on TFIDF 
 
@@ -140,20 +147,51 @@ def get_top_terms(vocab, no_stops=True, sort_col='n', k=1000):
         V = vocab
     return V.sort_values(sort_col, ascending=False).head(k)
 
-top_n = 1000
+
+# TFIDF.T
+top_n = 10000
 TOPV = get_top_terms(V, sort_col='n', k = top_n)
 
+pd.set_option('display.max_rows', 1000)
+# possible_stopwords = get_top_terms(V, sort_col='n', k = 50)['term_str']
+
+copyTOPV = TOPV
+bucket1 = list(copyTOPV['term_str'].iloc[0:49])
+copyTOPV = copyTOPV[50:]
+bucket2 = list(copyTOPV['term_str'].iloc[0:49])
+copyTOPV = copyTOPV[50:]
+bucket3 = list(copyTOPV['term_str'].iloc[0:49])
+copyTOPV = copyTOPV[50:]
+bucket4 = list(copyTOPV['term_str'].iloc[0:49])
+copyTOPV = copyTOPV[50:]
+bucket5 = list(copyTOPV['term_str'].iloc[0:49])
+copyTOPV = copyTOPV[50:]
+bucket6 = list(copyTOPV['term_str'].iloc[0:49])
+copyTOPV = copyTOPV[50:]
+
+bucket1
+
+bucket2
+
+bucket3
+
+bucket4
+
+bucket5
+
+bucket6
+
 # reduce tfidf small
-tfidf_small = TFIDF[TOPV.index].stack().to_frame().rename(columns={0:'w'})
+tfidf_small = TFIDF.loc[TOPV.index].stack().to_frame().rename(columns={0:'w'})
 
 
-from scipy.spatial import distance
-P['cosine'] = P.apply(distance.cosine, 1)
+# from scipy.spatial import distance
+# P['cosine'] = P.apply(distance.cosine, 1)
 
-V.to_csv('vocab_01.csv')
+# V.to_csv('vocab_01.csv')
 K.to_csv('token_01.csv')
 D.to_csv('doc_01.csv')
-P.to_csv('docpair_01.csv')
+# P.to_csv('docpair_01.csv')
 tfidf_small.to_csv('tfidf_small_01.csv')
 TFIDF.to_csv('tfidf_small_01.csv')
 
