@@ -13,12 +13,15 @@ os.getcwd()
 K = pd.read_csv('redo_tokens.csv')
 V = pd.read_csv('redo_vocab.csv')
 
-WORDS = (K.punc == 0) & (K.num == 0) & K.term_id.isin(V[V.stop==0].index)
+# sum(K.docID.isna()) # not missing to start with
 
+WORDS = (K.punc == 0) & (K.num == 0) & K.term_id.isin(V[V.stop==0].index)
+del(V)
 K = K[['year','month','num_day','section','docID','sentence_id','token_id','token_str', 'term_str', 'term_id', 'punc', 'num']]
 
 K = K.rename(columns={'num_day':'day', 'docID':'doc_key', 'sentence_id':'sentence_num','token_id':'token_num'})
 
+# sum(K.doc_key.isna()) # still not missing
 
 # fix the months to save memory
 import calendar
@@ -27,10 +30,13 @@ K.month =K.month.map(d)
 K.head()
 
 K.sort_values(by=['year','month'], inplace= True)
+# sum(K.doc_key.isna())  # still good..
 
 
 # # Extract DOC table
-D = K.iloc[:,:5].drop_duplicates().reset_index(drop=True)
+# K.iloc[:,:5].duplicated()
+D = K.iloc[:,:5].drop_duplicates().reset_index(drop=True) 
+# !!! think i got it -- since the ID's were messed up for rows that wrapped (and often followed similar patterns)
 D.index.name = 'doc_id'
 D.head()
 
@@ -38,7 +44,8 @@ D.head()
 # ## Remove duplicate doc_key
 D.doc_key.value_counts().head() # check to see if there are any in the full thing
 
-
+# D_original = D
+# D = D_original
 D = D.drop(list(D[D.doc_key=='pm'].index))
 D = D.drop(list(D[D.doc_key=='billion'].index))
 D = D.drop(list(D[D.doc_key=='million'].index))
@@ -56,6 +63,10 @@ K.head()
 
 K['doc_id'] = K.doc_key.map(D.reset_index().set_index('doc_key').doc_id)
 K.head()
+# sum(K.doc_key.isna()) # still nothing missing!
+sum(K.doc_id.isna()) # confirmed -- cannot get unique documents based on non-unique names 
+
+K= K[ -K.doc_id.isna()]
 
 
 # ## Remove doc_key from DOC and TOKEN
@@ -76,6 +87,9 @@ BOW.head()
 # DTM = BOW.unstack()
 # DTM.head()
 
+
+
+K.doc_id = K.doc_id.astype('int')
 
 A = BOW.reset_index().groupby(['doc_id']).n.sum()
 B = BOW.reset_index().groupby(['doc_id','term_id']).n.sum()
@@ -165,7 +179,12 @@ tfidf_small = TFIDF.loc[TOPV.index].stack().to_frame().rename(columns={0:'w'})
 # from scipy.spatial import distance
 # P['cosine'] = P.apply(distance.cosine, 1)
 
+K.doc_id = K.doc_id.astype('int32')
+
+K[K.doc_id.isna()]
+
 K.to_csv('redo_token_mod.csv')
 D.to_csv('redo_doc.csv')
 tfidf_small.to_csv('redo_tfidf_small.csv')
 TFIDF.to_csv('redo_tfidf.csv')
+
