@@ -16,10 +16,10 @@ os.getcwd()
 #%%
 
 # Developed in other notebook
-lex_db = 'C:\\Users\\alxgr\\Documents\\UVA\\DSI\\Spring 2019\\ETA\\Github Repo ETA\\DS5559\\labs\\2019-04-11_Lab11'
+lex_db = 'C:\\Users\\Nick\\Documents\\UVA\\DSI\\Spring 2019\\ETA\\Github Repo ETA\\DS5559\\labs\\2019-04-11_Lab11\\lexicons.db'
 
 # Developed in previous lab
-OHCO = ['year','month','day','section', 'doc_id' 'sentence_num']
+OHCO = ['year','month','day','section', 'doc_id', 'sentence_num']
 YEAR = OHCO[:1]
 MONTH = OHCO[:2]
 DATE = OHCO[:3]
@@ -92,7 +92,8 @@ emo_cols
 #%%
 
 tokens = pd.read_csv("redo_token_mod.csv")
-vocab = pd.read_sql("redo_vocab.csv", index_col='term_id')
+tokens = tokens[~tokens.term_str.isna()]
+vocab = pd.read_csv("redo_vocab.csv", index_col='term_id')
 docs = pd.read_csv("redo_doc.csv")
 # just renaming so I can delete items
 full_tokens = pd.merge(tokens, docs, on='doc_id')
@@ -131,8 +132,37 @@ FIG = dict(figsize=(20, 5), legend=True, fontsize=14, rot=45)
 #%%
 by_article = tokens.groupby(ARTICLE)[emo].sum().plot(**FIG)
 
-#%% 
-# ### By MONTH
+#%%
+
+by_internationalmonth = tokens[tokens.section=="International"].groupby(MONTH)[emo_cols].sum()
+
+max_x = by_internationalmonth.shape[0]
+xticks = list(range(0, max_x, 100))
+xticks.append(max_x - 1)
+
+
+by_internationalmonth['nrc_anger'].plot(**FIG, xticks=xticks)
+by_internationalmonth['nrc_sadness'].plot(**FIG, xticks=xticks)
+by_internationalmonth['nrc_fear'].plot(**FIG, xticks=xticks)
+
+#%%
+
+by_internationalmonth[emo_cols[:5]].plot(**FIG, xticks=xticks)
+by_month[emo_cols[:5]].plot(**FIG, xticks=xticks)
+
+#%%
+
+by_internationalmonth = tokens[tokens.section=="International"].groupby(MONTH)[emo_cols].sum()
+
+max_x = by_internationalmonth.shape[0]
+xticks = list(range(0, max_x, 100))
+xticks.append(max_x - 1)
+
+
+by_internationalmonth['nrc_anger'].plot(**FIG, xticks=xticks)
+by_internationalmonth['nrc_sadness'].plot(**FIG, xticks=xticks)
+by_internationalmonth['nrc_fear'].plot(**FIG, xticks=xticks)
+
 
 #%%
 by_date = tokens.groupby(DATE)[emo_cols].sum()
@@ -163,25 +193,26 @@ xticks.append(max_x - 1)
 #%%
 by_month[emo].plot(**FIG, xticks=xticks)
 
+
 #%% 
 # ### Add text to do spot checks
 
 #%%
-tokens['html'] =  tokens.apply(lambda x: 
-                               "<span class='sent{}'>{}</span>".format(int(np.sign(x[emo])), x.token_str), 1)
+#tokens['html'] =  tokens.apply(lambda x: 
+ #                              "<span class='sent{}'>{}</span>".format(int(np.sign(x[emo])), x.token_str), 1)
 
 
 #%%
-tokens['html'].head()
+#tokens['html'].head()
 
 
 #%%
-by_month['month_str'] = tokens.groupby(SENTS).term_str.apply(lambda x: x.str.cat(sep=' '))
-by_month['html_str'] = tokens.groupby(SENTS).html.apply(lambda x: x.str.cat(sep=' '))
+by_month['month_str'] = tokens.groupby(MONTH).term_str.apply(lambda x: x.str.cat(sep=' '))
+#by_month['html_str'] = tokens.groupby(MONTH).html.apply(lambda x: x.str.cat(sep=' '))
 
 
 #%%
-by_month[['month_str', 'html_str']].head()
+by_month[['month_str']].head()
 
 #%% 
 # ### Histogram
@@ -230,13 +261,13 @@ by_month.iloc[xticks][emo].sort_index().to_frame()
 # ### Inspect Positives
 
 #%%
-by_month.sort_values(emo, ascending=False)[[emo,'sent_str']].head(20)
+by_month.sort_values(emo, ascending=False)[[emo,'month_str']].head(20)
 
 #%% 
 # ### Inspect Negatives
 
 #%%
-by_month.sort_values(emo, ascending=True)[[emo,'sent_str']].head(20)
+by_month.sort_values(emo, ascending=True)[[emo,'month_str']].head(20)
 
 #%% 
 # ## Apply Transforms#%% 
@@ -260,7 +291,7 @@ FFTCFG1 = dict(
     low_pass_size = 5,
     x_reverse_len = 100
 )
-X1 = get_dct_transform(by_sent[emo].values, **FFTCFG1)
+X1 = get_dct_transform(by_month[emo].values, **FFTCFG1)
 
 
 #%%
@@ -269,7 +300,6 @@ FIG['figsize'] = (12,5)
 pd.Series(X1).plot(**FIG)
 
 #%% 
-# <img src="moby_rplot.jpg" width="900" />
 #%% 
 # ### Using Rolling
 # **Window types**: 
@@ -299,7 +329,8 @@ CFG1 = dict(
 
 #%%
 FIG['figsize'] = (20,5)
-by_sent[emo].fillna(0).rolling(**CFG1).sum().plot(**FIG)
+by_month[emo].fillna(0).rolling(**CFG1).sum().plot(**FIG)
+#does not plot
 
 
 #%%
@@ -314,7 +345,8 @@ CFG2['window']
 
 
 #%%
-tokens[emo].fillna(0).rolling(**CFG2).sum().plot(**FIG)
+#tokens[emo].fillna(0).rolling(**CFG2).sum().plot(**FIG)
+#hangs 
 
 
 #%%
@@ -359,9 +391,10 @@ B
 
 #%%
 scale_max = EOM.shape[0]
-kde_bandwidth = 2500
+kde_bandwidth = 1000
 # kde_bandwidth = 250
 x_axis = np.linspace(0, scale_max, kde_samples)[:, np.newaxis]
+#hangs below
 B['kde'] = B.apply(lambda row: KDE(kernel=kde_kernel, bandwidth=kde_bandwidth).fit(row.x), 1)
 B['scores'] = B.apply(lambda row: row.kde.score_samples(x_axis), axis=1)
 
