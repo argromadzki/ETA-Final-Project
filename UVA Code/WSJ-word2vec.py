@@ -41,7 +41,7 @@ corpus[:5]
 
 #%%
 model = word2vec.Word2Vec(corpus, size=246, window=5, min_count=200, workers=4)
-
+del(corpus)
 
 #%% # ## Visualize with tSNE
 #%% # ### Generate coordinates to plot
@@ -65,8 +65,11 @@ coords['y'] = tsne_values[:,1]
 
 #%%
 coords.head()
+#%%
 
-#%% # ### Plot the coordinates
+coords_full = coords
+coords_full.to_csv("tsne_coordinates.csv")
+coords = coords.sample(500)
 
 #%%
 plt.figure(figsize=(800, 800)) 
@@ -80,7 +83,3 @@ for i in range(len(coords)):
                  va='bottom')
 plt.savefig('wsj wordcloud.png')
 plt.show()
-
-
-
-#%%
